@@ -5,13 +5,16 @@ import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Table from 'react-bootstrap/Table';
-import { getArticles } from '../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { getArticles, deleteArticle } from '../actions';
 
 class Articles extends Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.search = this.search.bind(this);
+        this.deleteArticle = this.deleteArticle.bind(this);
     }
 
     componentDidMount() {
@@ -44,6 +47,11 @@ class Articles extends Component {
             // TO DO
         }
         dispatch(getArticles(query));
+    }
+
+    deleteArticle(articleId) {
+        const { dispatch} = this.props;
+        dispatch(deleteArticle(articleId));
     }
 
     render() {
@@ -81,17 +89,24 @@ class Articles extends Component {
                             <th>Long Description</th>
                             <th>Last Modified</th>
                             <th>Authors</th>
+                            <th className="actions">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             articles.map(article => (
-                                <tr>
+                                <tr key={article['_id']}>
                                     <td>{article.title}</td>
                                     <td>{article.short_description}</td>
                                     <td>{article.long_description}</td>
                                     <td>{moment(article.updated_at).format('YYYY MM DD [at] HH:mm')}</td>
                                     <td>To Be Implemented</td>
+                                    <td className="actions">
+                                        <Button size="sm"><FontAwesomeIcon icon={faPencilAlt} /></Button>
+                                        <Button size="sm" variant="danger" onClick={() => this.deleteArticle(article['_id'])}>
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </Button>
+                                    </td>
                                 </tr>
                             ))
                         }

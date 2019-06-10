@@ -41,3 +41,18 @@ const getArticlesCompleted = (articles) => ({
 const getArticlesFailed = () => ({
     type: GET_ARTICLES_FAILED
 });
+
+export const deleteArticle = (id) => {
+    return dispatch => {
+        let requestUrl = `${SERVER_URL}/articles/${id}`;
+        fetch(requestUrl, { method: 'DELETE' })
+            .then(response => {
+                console.log(response);
+                dispatch(getArticles());
+            })
+            .catch(error => { 
+                console.log('Error Happened!!');
+                console.log(error);
+            });
+    }
+};
