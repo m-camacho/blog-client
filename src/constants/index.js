@@ -1,0 +1,6 @@
+export const SERVER_URL = 'http://localhost:3001';
+
+export const GET_ARTICLES = 'GET_ARTICLES';
+export const GET_ARTICLES_STARTED = 'GET_ARTICLES_STARTED';
+export const GET_ARTICLES_FAILED = 'GET_ARTICLES_FAILED';
+export const GET_ARTICLES_COMPLETED = 'GET_ARTICLES_COMPLETED';
