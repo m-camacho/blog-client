@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -28,7 +29,9 @@ class Articles extends Component {
     }
 
     search() {
-        const { authors, title, edition } = this.state;
+        const { authors, title } = this.state;
+        const { dispatch} = this.props;
+
         if (!title && !authors) {
             return;
         }
@@ -87,7 +90,7 @@ class Articles extends Component {
                                     <td>{article.title}</td>
                                     <td>{article.short_description}</td>
                                     <td>{article.long_description}</td>
-                                    <td>{article.updated_at}</td>
+                                    <td>{moment(article.updated_at).format('YYYY MM DD [at] HH:mm')}</td>
                                     <td>To Be Implemented</td>
                                 </tr>
                             ))

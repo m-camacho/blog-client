@@ -5,10 +5,18 @@ import {
     GET_ARTICLES_FAILED
 } from "../constants";
 
-export const getArticles = () => {
+export const getArticles = (query) => {
     return dispatch => {
         dispatch(getArticlesStarted());
-        fetch(`${SERVER_URL}/articles`)
+        let requestUrl = `${SERVER_URL}/articles`;
+        if (query) {
+            let queryString = [];
+            if (query.title) queryString.push(`title=${encodeURI(query.title)}`);
+            //TO DO
+            queryString = queryString.join('&');
+            if (queryString) requestUrl = `${requestUrl}?${queryString}`
+        }
+        fetch(requestUrl)
             .then(response => response.json())
             .then(response => {
                 console.log(response);
