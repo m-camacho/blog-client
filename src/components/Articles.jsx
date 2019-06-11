@@ -8,6 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import { getArticles, deleteArticle } from '../actions';
+import { isNullOrUndefined } from '../utils';
 
 class Articles extends Component {
     constructor(props) {
@@ -35,14 +36,10 @@ class Articles extends Component {
         const { authors, title } = this.state;
         const { dispatch} = this.props;
 
-        if (!title && !authors) {
-            return;
-        }
+        if (isNullOrUndefined(title) && !authors) return;
         
         const query = {};
-        if (title) { 
-            query.title = title;
-        }
+        if (title) query.title = title;
         if (authors) { 
             // TO DO
         }
@@ -102,7 +99,9 @@ class Articles extends Component {
                                     <td>{moment(article.updated_at).format('YYYY MM DD [at] HH:mm')}</td>
                                     <td>To Be Implemented</td>
                                     <td className="actions">
-                                        <Button size="sm"><FontAwesomeIcon icon={faPencilAlt} /></Button>
+                                        <Button size="sm" onClick={() => history.push(`/articles/edit/${article['_id']}`)}>
+                                            <FontAwesomeIcon icon={faPencilAlt} />
+                                        </Button>
                                         <Button size="sm" variant="danger" onClick={() => this.deleteArticle(article['_id'])}>
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </Button>

@@ -1,9 +1,34 @@
 import {
     SERVER_URL,
+    GET_ARTICLE_STARTED,
+    GET_ARTICLE_COMPLETED,
+    GET_ARTICLE_FAILED,
     GET_ARTICLES_STARTED,
     GET_ARTICLES_COMPLETED,
     GET_ARTICLES_FAILED
 } from "../constants";
+
+export const getArticle = (id) => {
+    return dispatch => {
+        dispatch(getArticlesStarted());
+        let requestUrl = `${SERVER_URL}/articles/${id}`;
+        fetch(requestUrl)
+            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+                dispatch(getArticleCompleted(response));
+            })
+            .catch(error => { 
+                console.log('Error Happened!!');
+                console.log(error);
+            });
+    }
+};
+
+const getArticleCompleted = (article) => ({
+    type: GET_ARTICLE_COMPLETED,
+    payload: { article }
+});
 
 export const getArticles = (query) => {
     return dispatch => {
