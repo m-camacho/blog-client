@@ -1,7 +1,15 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { GET_ARTICLE_STARTED, GET_ARTICLES_STARTED, GET_ARTICLES_COMPLETED, GET_ARTICLE_COMPLETED } from '../constants';
+import {
+    GET_ARTICLE_STARTED,
+    GET_ARTICLES_STARTED,
+    GET_ARTICLES_COMPLETED,
+    GET_ARTICLE_COMPLETED,
+    UPDATE_ARTICLE_STARTED,
+    UPDATE_ARTICLE_COMPLETED,
+} from '../constants';
 
 const defaultState = {
+    article: null,
     articles: [],
     authors: [],
     loading: false,

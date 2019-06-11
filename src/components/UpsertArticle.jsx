@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Col, Form, FormControl, InputGroup, Row, Table } from 'react-bootstrap';
+import { Button, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { getArticle } from '../actions';
+import { getArticle, createArticle, updateArticle } from '../actions';
 
 class UpsertArticle extends Component {
     constructor(props) {
@@ -37,11 +37,21 @@ class UpsertArticle extends Component {
         });
     }
 
-    save() {
+    async save() {
         const { dispatch, history } = this.props;
         const { _id, title, short_description, long_description } = this.state;
 
         console.log(this.state);
+        try {
+            if (_id) {
+                await dispatch(updateArticle({ _id, title, short_description, long_description}));
+            } else {
+                await dispatch(createArticle({ title, short_description, long_description }));
+            }
+            history.push('/articles');
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     render() {

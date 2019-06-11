@@ -5,7 +5,10 @@ import {
     GET_ARTICLE_FAILED,
     GET_ARTICLES_STARTED,
     GET_ARTICLES_COMPLETED,
-    GET_ARTICLES_FAILED
+    GET_ARTICLES_FAILED,
+    UPDATE_ARTICLE_STARTED,
+    UPDATE_ARTICLE_FAILED,
+    UPDATE_ARTICLE_COMPLETED,
 } from "../constants";
 
 export const getArticle = (id) => {
@@ -79,5 +82,54 @@ export const deleteArticle = (id) => {
                 console.log('Error Happened!!');
                 console.log(error);
             });
+    }
+};
+
+export const updateArticle = (article) => {
+    return dispatch => {
+        let requestUrl = `${SERVER_URL}/articles/${article['_id']}`;
+        // dispatch(updateArticleStarted())
+        return fetch(requestUrl, { 
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(article),
+        }).then(response => response.json()).then(response => {
+            console.log(response);
+            // dispatch(updateArticleCompleted(response));
+        }).catch(error => { 
+            console.log('Error Happened!!');
+            console.log(error);
+        });
+    }
+};
+
+const updateArticleStarted = () => ({
+    type: UPDATE_ARTICLE_STARTED
+});
+
+const updateArticleCompleted = (article) => ({
+    type: UPDATE_ARTICLE_COMPLETED,
+    payload: { article }
+});
+
+const updateArticleFailed = () => ({
+    type: UPDATE_ARTICLE_FAILED
+});
+
+export const createArticle = (article) => {
+    return dispatch => {
+        let requestUrl = `${SERVER_URL}/articles`;
+        // dispatch(createArticleStarted())
+        return fetch(requestUrl, { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(article),
+        }).then(response => response.json()).then(response => {
+            console.log(response);
+            // dispatch(createArticleCompleted(response));
+        }).catch(error => { 
+            console.log('Error Happened!!');
+            console.log(error);
+        });
     }
 };

@@ -93,10 +93,10 @@ class Articles extends Component {
                         {
                             articles.map(article => (
                                 <tr key={article['_id']}>
-                                    <td>{article.title}</td>
+                                    <td className="title">{article.title}</td>
                                     <td>{article.short_description}</td>
                                     <td>{article.long_description}</td>
-                                    <td>{moment(article.updated_at).format('YYYY MM DD [at] HH:mm')}</td>
+                                    <td className="last-modified">{moment(article.updated_at).format('YYYY MM DD [at] HH:mm')}</td>
                                     <td>To Be Implemented</td>
                                     <td className="actions">
                                         <Button size="sm" onClick={() => history.push(`/articles/edit/${article['_id']}`)}>

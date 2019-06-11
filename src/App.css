@@ -10,8 +10,18 @@
   margin-right: 10px;
 }
 
+.articles-page .title {
+  min-width: 185px;
+}
+
+.articles-page .last-modified {
+  min-width: 130px;
+}
+
 .articles-page .actions {
   text-align: right;
+  min-width: 108px;
+  text-align: center;
 }
 
 .articles-page .actions button {
