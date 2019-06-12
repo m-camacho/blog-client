@@ -36,10 +36,11 @@ export const getArticles = (query) => {
     return dispatch => {
         dispatch(getArticlesStarted());
         let requestUrl = `${SERVER_URL}/articles`;
+        console.log(query);
         if (query) {
             let queryString = [];
             if (query.title) queryString.push(`title=${encodeURI(query.title)}`);
-            //TO DO
+            if (query.authors) queryString.push(`authors=${query.authors}`);
             queryString = queryString.join('&');
             if (queryString) requestUrl = `${requestUrl}?${queryString}`
         }

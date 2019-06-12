@@ -6,6 +6,10 @@
   padding: 0 0 30px 0;
 }
 
+.articles-page .buttons, .upsert-article-page .buttons {
+  margin-top: 25px;
+}
+
 .articles-page .buttons button, .upsert-article-page .buttons button {
   margin-right: 10px;
 }
@@ -26,8 +30,4 @@
 
 .articles-page .actions button {
   margin-left: 10px;
-}
-
-.upsert-article-page .buttons {
-  margin-top: 25px;
 }

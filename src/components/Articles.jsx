@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Table from 'react-bootstrap/Table';
+import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import { getArticles, deleteArticle } from '../actions/articles';
@@ -14,7 +15,9 @@ import { isNullOrUndefined } from '../utils';
 class Articles extends Component {
     constructor(props) {
         super(props);
+        this.state = { authors: [] };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.search = this.search.bind(this);
         this.deleteArticle = this.deleteArticle.bind(this);
     }
@@ -34,6 +37,10 @@ class Articles extends Component {
         });
     }
 
+    handleSelectChange(selectedOptions) {
+        this.setState({ authors: selectedOptions});
+    }
+
     search() {
         const { authors, title } = this.state;
         const { dispatch} = this.props;
@@ -42,9 +49,7 @@ class Articles extends Component {
         
         const query = {};
         if (title) query.title = title;
-        if (authors) { 
-            // TO DO
-        }
+        if (authors && authors.length > 0) query.authors = authors.map(author => author.value).join(',');
         dispatch(getArticles(query));
     }
 
@@ -56,6 +61,7 @@ class Articles extends Component {
     render() {
         const { articles, authors } = this.props;
         const { history } = this.props;
+        const options = authors ? Object.keys(authors).map(authorId => ({ value: authorId, label: authors[authorId] })) : [];
         return (
             <div className="articles-page">
                 <h1>Articles</h1>
@@ -67,12 +73,15 @@ class Articles extends Component {
                         </InputGroup.Prepend>
                         <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="title" onChange={this.handleChange} />
                     </InputGroup>
-                    <InputGroup size="sm" className="mb-3">
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>Authors</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="authors" onChange={this.handleChange} />
-                    </InputGroup>
+                    <div>
+                        Authors: 
+                        <Select 
+                            isMulti
+                            value={this.state.authors}
+                            options={options}
+                            onChange={this.handleSelectChange}
+                        />
+                    </div>
                     <div className="buttons">
                         <Button size="sm" onClick={this.search}>Search</Button>
                         <Button size="sm" onClick={() => history.push('/articles/new')}>New Article</Button>

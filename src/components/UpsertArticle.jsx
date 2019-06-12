@@ -55,7 +55,6 @@ class UpsertArticle extends Component {
     }
 
     handleSelectChange(selectedOptions) {
-        console.log(selectedOptions);
         this.setState({ authors: selectedOptions});
     }
 
