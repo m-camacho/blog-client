@@ -18,7 +18,6 @@ export const getArticle = (id) => {
         fetch(requestUrl)
             .then(response => response.json())
             .then(response => {
-                console.log(response);
                 dispatch(getArticleCompleted(response));
             })
             .catch(error => { 
@@ -47,7 +46,7 @@ export const getArticles = (query) => {
         fetch(requestUrl)
             .then(response => response.json())
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 dispatch(getArticlesCompleted(response));
             })
             .catch(error => { 
@@ -75,7 +74,7 @@ export const deleteArticle = (id) => {
         let requestUrl = `${SERVER_URL}/articles/${id}`;
         fetch(requestUrl, { method: 'DELETE' })
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 dispatch(getArticles());
             })
             .catch(error => { 
@@ -94,7 +93,7 @@ export const updateArticle = (article) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(article),
         }).then(response => response.json()).then(response => {
-            console.log(response);
+            // console.log(response);
             // dispatch(updateArticleCompleted(response));
         }).catch(error => { 
             console.log('Error Happened!!');
@@ -125,7 +124,7 @@ export const createArticle = (article) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(article),
         }).then(response => response.json()).then(response => {
-            console.log(response);
+            // console.log(response);
             // dispatch(createArticleCompleted(response));
         }).catch(error => { 
             console.log('Error Happened!!');

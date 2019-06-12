@@ -27,3 +27,7 @@
 .articles-page .actions button {
   margin-left: 10px;
 }
+
+.upsert-article-page .buttons {
+  margin-top: 25px;
+}

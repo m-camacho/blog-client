@@ -7,7 +7,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
-import { getArticles, deleteArticle } from '../actions';
+import { getArticles, deleteArticle } from '../actions/articles';
+import { getAuthors } from '../actions/authors';
 import { isNullOrUndefined } from '../utils';
 
 class Articles extends Component {
@@ -20,6 +21,7 @@ class Articles extends Component {
 
     componentDidMount() {
         const { dispatch} = this.props;
+        dispatch(getAuthors());
         dispatch(getArticles());
     }
 
@@ -52,9 +54,8 @@ class Articles extends Component {
     }
 
     render() {
-        const { articles } = this.props;
+        const { articles, authors } = this.props;
         const { history } = this.props;
-        
         return (
             <div className="articles-page">
                 <h1>Articles</h1>
@@ -97,7 +98,7 @@ class Articles extends Component {
                                     <td>{article.short_description}</td>
                                     <td>{article.long_description}</td>
                                     <td className="last-modified">{moment(article.updated_at).format('YYYY MM DD [at] HH:mm')}</td>
-                                    <td>To Be Implemented</td>
+                                    <td>{article.authors.map(authorId => authors[authorId]).join(', ')}</td>
                                     <td className="actions">
                                         <Button size="sm" onClick={() => history.push(`/articles/edit/${article['_id']}`)}>
                                             <FontAwesomeIcon icon={faPencilAlt} />
@@ -116,6 +117,15 @@ class Articles extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({ articles: state.articles });
+const mapStateToProps = (state) => {
+    const authors = {};
+    state.authors.forEach(author => {
+        authors[author._id] = author.name;
+    });
+    return {
+        authors,
+        articles: state.articles
+    };
+};
 
 export default connect(mapStateToProps)(Articles);

@@ -1,11 +1,10 @@
 import cloneDeep from 'lodash/cloneDeep';
 import {
+    GET_AUTHORS_COMPLETED,
     GET_ARTICLE_STARTED,
     GET_ARTICLES_STARTED,
     GET_ARTICLES_COMPLETED,
     GET_ARTICLE_COMPLETED,
-    UPDATE_ARTICLE_STARTED,
-    UPDATE_ARTICLE_COMPLETED,
 } from '../constants';
 
 const defaultState = {
@@ -18,6 +17,12 @@ const defaultState = {
 
 const appReducer = (state = defaultState, action) => {
     switch(action.type) {
+        case GET_AUTHORS_COMPLETED: {
+            const newState = cloneDeep(state);
+            newState.authors = action.payload.authors;
+            newState.loading = false;
+            return newState;
+        }
         case GET_ARTICLE_STARTED: {
             const newState = cloneDeep(state);
             newState.loading = true;

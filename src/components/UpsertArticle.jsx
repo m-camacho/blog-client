@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { getArticle, createArticle, updateArticle } from '../actions';
+import { Button, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
+import Select from 'react-select';
+import { getArticle, createArticle, updateArticle } from '../actions/articles';
+import { getAuthors } from '../actions/authors';
 
 class UpsertArticle extends Component {
     constructor(props) {
@@ -12,21 +14,36 @@ class UpsertArticle extends Component {
             long_description: '',
             authors: []
         }
-
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.save = this.save.bind(this);
     }
 
     componentDidMount() {
-        const { dispatch, match} = this.props;
+        const { dispatch, match } = this.props;
+        dispatch(getAuthors()); // This could be optimized
         if (match.params.id) {
             dispatch(getArticle(match.params.id));
         }
     }
 
     componentWillReceiveProps(newProps) {
-        const { article } = newProps;
-        this.setState({ ...article })
+        const { article, authors } = newProps;
+        if (article && article.authors) {
+            const articleAuthors = article.authors.map(authorID => {
+                const found = authors.find(author => author['_id'] === authorID)
+                return { value: found['_id'], label: found.name };
+            });
+            this.setState({ 
+                ...article,
+                authors: articleAuthors,
+            })
+        } else {
+            this.setState({ 
+                ...article,
+                authors: [],
+            })
+        }
     }
 
     handleChange(e) {
@@ -37,16 +54,22 @@ class UpsertArticle extends Component {
         });
     }
 
+    handleSelectChange(selectedOptions) {
+        console.log(selectedOptions);
+        this.setState({ authors: selectedOptions});
+    }
+
     async save() {
         const { dispatch, history } = this.props;
         const { _id, title, short_description, long_description } = this.state;
 
         console.log(this.state);
         try {
+            const authors = this.state.authors.map(author => author.value);
             if (_id) {
-                await dispatch(updateArticle({ _id, title, short_description, long_description}));
+                await dispatch(updateArticle({ _id, title, short_description, long_description, authors }));
             } else {
-                await dispatch(createArticle({ title, short_description, long_description }));
+                await dispatch(createArticle({ title, short_description, long_description, authors }));
             }
             history.push('/articles');
         } catch(error) {
@@ -56,6 +79,7 @@ class UpsertArticle extends Component {
 
     render() {
         const { authors, history, match } = this.props;
+        const options = authors.map(author => ({ value: author['_id'], label: author.name }));
         return (
             <div className="upsert-article-page">
                 <h1>{ match.params.id ? 'Update Article' : 'Create new Article'}</h1>
@@ -97,6 +121,15 @@ class UpsertArticle extends Component {
                                 onChange={this.handleChange}
                             />
                         </InputGroup>
+                        <div>
+                            Authors: 
+                            <Select 
+                                isMulti
+                                value={this.state.authors}
+                                options={options}
+                                onChange={this.handleSelectChange}
+                            />
+                        </div>
                     </Col>
                 </Row>
                 <div className="buttons">
@@ -109,7 +142,8 @@ class UpsertArticle extends Component {
 }
 
 const mapStateToProps = (state) => ({ 
-    article: state.article
+    authors: state.authors,
+    article: state.article,
 });
 
 export default connect(mapStateToProps)(UpsertArticle);
